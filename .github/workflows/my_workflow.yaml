@@ -1,0 +1,35 @@
+name: Terraform workflow
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+
+    # Set up AWS credentials using OpenID Connect (OIDC)
+    - name: Set up AWS credentials using OIDC
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        role-to-assume: {{ secrets.AWS_SECRET }}
+        aws-region: us-west-2
+      
+    - name: Format Terraform
+      run: |
+        terraform fmt
+    
+    - name: Initalize Terraform
+      run: |
+        terraform init
+
+    - name: Validate Terraform
+      run: |
+        terraform validate
+
+    - name: Plan Terraform
+      run: |
+        terraform plan
