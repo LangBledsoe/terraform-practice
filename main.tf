@@ -1,17 +1,16 @@
 terraform {
 
-  cloud {
-    organization = "native-pythons"
-    workspaces {
-      name = "langs-workspace"
-    }
-  }
-
   required_providers {
     aws = {
       source  = "hashicorp/aws"
       version = "~> 4.16"
     }
+  }
+
+  backend "s3" {
+    bucket = "langs-bucket"
+    key    = "home/key"
+    region = "us-east-2"
   }
 
   required_version = ">= 1.2.0"
