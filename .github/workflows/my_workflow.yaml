@@ -20,6 +20,7 @@ jobs:
       with:
         role-to-assume: {{ secrets.AWS_SECRET }}
         aws-region: us-west-2
+        role-session-name: GithubActions
       
     - name: Format Terraform
       run: |
