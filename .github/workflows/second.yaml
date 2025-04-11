@@ -1,0 +1,32 @@
+name: Terraform workflow
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  id-token: write 
+  contents: read 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+
+    # Set up AWS credentials using OpenID Connect (OIDC)
+    - name: Set up AWS credentials using OIDC
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        role-to-assume: ${{ secrets.AWS_SECRET }}
+        aws-region: us-west-2
+        role-session-name: GithubActions
+      
+    - name: Initalize Terraform
+      run: |
+        terraform init
+
+    - name: Apply Terraform
+      run: |
+        terraform apply
